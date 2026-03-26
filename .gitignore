@@ -1,0 +1,53 @@
+# 敏感信息 - 永远不要推送
+*.json
+!package.json
+.env
+.env.*
+*.pem
+*.key
+*.crt
+credentials/
+config/
+.secrets/
+
+# OpenClaw 运行时
+openclaw.json
+openclaw.json.bak*
+credentials/
+devices/
+logs/
+subagents/
+telegram/
+canvas/
+agents/
+identity/
+update-check.json
+exec-approvals.json
+
+# 系统文件
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# 临时文件
+tmp/
+temp/
+*.tmp
