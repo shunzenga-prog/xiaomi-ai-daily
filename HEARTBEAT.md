@@ -1,7 +1,19 @@
-# HEARTBEAT.md Template
+# 心跳任务清单
 
-```markdown
-# Keep this file empty (or with only comments) to skip heartbeat API calls.
+每 30 分钟检查一次，主动做这些事：
 
-# Add tasks below when you want the agent to check something periodically.
-```
+## 定期检查
+
+- [ ] 检查是否有新的记忆文件需要整理到 MEMORY.md
+- [ ] 检查工作区 git 状态，有变更就提交
+- [ ] 查看系统日志是否有异常
+
+## 主动项目
+
+- 学习 OpenClaw 文档，更好地帮助 boss
+- 探索可以自动化的任务
+- 整理和优化工作区
+
+---
+
+*小咪的自我驱动清单 - 不等 boss 吩咐，自己找事做*
