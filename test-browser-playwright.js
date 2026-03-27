@@ -16,7 +16,7 @@ const { firefox } = require('playwright');
   // 访问网页
   console.log('🌐 访问小红书...');
   await page.goto('https://www.xiaohongshu.com/explore', { 
-    waitUntil: 'networkidle2',
+    waitUntil: 'networkidle',
     timeout: 30000 
   });
   
