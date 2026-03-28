@@ -104,6 +104,27 @@
 - 自动化运营优化
 - 语音识别工具链搭建
 
+### 网络工具使用技巧（2026-03-28）
+
+**工具可用性：**
+| 工具 | 状态 | 替代方案 |
+|------|------|----------|
+| web_search | ⚠️ 不稳定 | exec + curl |
+| web_fetch | ❌ 不可用 | exec + curl |
+| exec + curl | ✅ 可用 | - |
+
+**最佳实践：**
+```bash
+# 搜索
+curl -s "https://html.duckduckgo.com/html/?q=关键词"
+
+# 获取网页
+curl -s "https://example.com" | head -200
+
+# 获取GitHub README
+curl -s "https://raw.githubusercontent.com/user/repo/main/README.md"
+```
+
 ---
 
 ## 学习成果
