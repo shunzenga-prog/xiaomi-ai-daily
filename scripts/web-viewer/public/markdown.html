@@ -273,6 +273,87 @@
       background: #c0392b;
     }
     
+    .btn-zoom {
+      background: #f39c12;
+      color: white;
+    }
+    
+    .btn-zoom:hover {
+      background: #e67e22;
+    }
+    
+    .btn-zoom.active {
+      background: #27ae60;
+    }
+    
+    .btn-fullscreen {
+      background: #9b59b6;
+      color: white;
+    }
+    
+    .btn-fullscreen:hover {
+      background: #8e44ad;
+    }
+    
+    /* 放大模式 */
+    .zoomed {
+      font-size: 1.3em;
+      line-height: 2;
+    }
+    
+    .zoomed h1 { font-size: 2.5em; }
+    .zoomed h2 { font-size: 2em; }
+    .zoomed h3 { font-size: 1.5em; }
+    
+    /* 全屏预览 */
+    .fullscreen-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.9);
+      z-index: 9999;
+      padding: 40px;
+      overflow-y: auto;
+    }
+    
+    .fullscreen-overlay.show {
+      display: block;
+    }
+    
+    .fullscreen-close {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 18px;
+      cursor: pointer;
+      z-index: 10000;
+    }
+    
+    .fullscreen-close:hover {
+      background: #eee;
+    }
+    
+    .fullscreen-content {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      color: #333;
+    }
+    
+    .fullscreen-content .markdown-body {
+      font-size: 1.2em;
+      line-height: 1.8;
+    }
+    
     .loading {
       text-align: center;
       padding: 40px;
@@ -328,10 +409,12 @@
         <div class="panel-header">
           <span>👁️ 预览</span>
           <div class="toolbar">
-            <button class="btn-image" onclick="exportImage()">📷 导出图片</button>
+            <button class="btn-zoom" onclick="toggleZoom()">🔍 放大</button>
+            <button class="btn-fullscreen" onclick="openFullscreen()">📺 全屏</button>
+            <button class="btn-image" onclick="exportImage()">📷 导出</button>
           </div>
         </div>
-        <div class="content">
+        <div class="content" id="previewContent">
           <div id="preview" class="markdown-body">
             <div class="loading">选择文件或开始编写...</div>
           </div>
@@ -340,7 +423,57 @@
     </div>
   </div>
   
+  <!-- 全屏预览层 -->
+  <div class="fullscreen-overlay" id="fullscreenOverlay">
+    <button class="fullscreen-close" onclick="closeFullscreen()">✕ 关闭</button>
+    <div class="fullscreen-content">
+      <div id="fullscreenPreview" class="markdown-body"></div>
+    </div>
+  </div>
+  
   <script>
+    // 放大模式切换
+    let isZoomed = false;
+    function toggleZoom() {
+      isZoomed = !isZoomed;
+      const preview = document.getElementById('preview');
+      const btn = document.querySelector('.btn-zoom');
+      
+      if (isZoomed) {
+        preview.classList.add('zoomed');
+        btn.classList.add('active');
+        btn.textContent = '🔍 缩小';
+      } else {
+        preview.classList.remove('zoomed');
+        btn.classList.remove('active');
+        btn.textContent = '🔍 放大';
+      }
+    }
+    
+    // 全屏预览
+    function openFullscreen() {
+      const overlay = document.getElementById('fullscreenOverlay');
+      const fullscreenPreview = document.getElementById('fullscreenPreview');
+      const preview = document.getElementById('preview');
+      
+      fullscreenPreview.innerHTML = preview.innerHTML;
+      overlay.classList.add('show');
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function closeFullscreen() {
+      const overlay = document.getElementById('fullscreenOverlay');
+      overlay.classList.remove('show');
+      document.body.style.overflow = '';
+    }
+    
+    // ESC 关闭全屏
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeFullscreen();
+      }
+    });
+    
     // 加载文件列表
     async function loadFiles() {
       try {
