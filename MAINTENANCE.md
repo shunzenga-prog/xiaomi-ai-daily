@@ -41,9 +41,9 @@
 
 | Skill | 版本 | 状态 | 最近改进 | 待优化 |
 |-------|------|------|----------|--------|
-| 📝 article-writer | v1.0 | 🟡 基础版 | 初始模板 | 需加入爆款公式 |
+| 📝 article-writer | v1.1 | ✅ 已优化 | 加入小咪风格+爆款公式 | 持续迭代 |
 | 📅 content-planner | v1.0 | 🟡 基础版 | 初始模板 | 需加入热点追踪 |
-| 🧠 content-brainstorm | v1.0 | ✅ 已安装 | 从ClawHub安装 | 立即可用 |
+| 🧠 content-brainstorm | v1.1 | ✅ 已优化 | 小咪特色+爆款特征库 | 持续迭代 |
 | 🔴 xiaohongshu-mcp | v1.0 | ✅ 可用 | 完整MCP协议 | 需实战测试 |
 | 🔴 xiaohongshu | v1.0 | ✅ 可用 | 完整自动化 | 需发布测试 |
 
