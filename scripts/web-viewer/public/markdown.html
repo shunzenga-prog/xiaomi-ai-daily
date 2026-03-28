@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Markdown 渲染器 - 小咪报告中心</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans CJK SC', 'WenQuanYi Micro Hei', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .header {
+      text-align: center;
+      color: white;
+      margin-bottom: 20px;
+    }
+    
+    .header h1 {
+      font-size: 2em;
+      margin-bottom: 10px;
+    }
+    
+    .header p {
+      opacity: 0.8;
+    }
+    
+    .nav {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+    
+    .nav a {
+      color: white;
+      text-decoration: none;
+      padding: 8px 16px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 20px;
+      font-size: 14px;
+    }
+    
+    .nav a:hover {
+      background: rgba(255,255,255,0.3);
+    }
+    
+    .file-selector {
+      background: white;
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+    
+    .file-selector label {
+      font-weight: bold;
+      white-space: nowrap;
+    }
+    
+    .file-selector select {
+      flex: 1;
+      min-width: 200px;
+      padding: 10px 15px;
+      border: 2px solid #667eea;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    
+    .preview-container {
+      display: flex;
+      gap: 20px;
+    }
+    
+    .editor-panel, .preview-panel {
+      flex: 1;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .panel-header {
+      background: #f8f9fa;
+      padding: 12px 20px;
+      border-bottom: 1px solid #e9ecef;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    
+    .editor-panel textarea {
+      width: 100%;
+      height: 500px;
+      border: none;
+      padding: 20px;
+      font-family: 'Fira Code', 'Consolas', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      resize: vertical;
+    }
+    
+    .editor-panel textarea:focus {
+      outline: none;
+    }
+    
+    .preview-panel .content {
+      padding: 20px;
+      overflow-y: auto;
+      flex: 1;
+    }
+    
+    /* Markdown 样式 */
+    .markdown-body h1 {
+      font-size: 2em;
+      border-bottom: 2px solid #667eea;
+      padding-bottom: 10px;
+      margin: 0 0 20px 0;
+      color: #2c3e50;
+    }
+    
+    .markdown-body h2 {
+      font-size: 1.5em;
+      color: #34495e;
+      margin: 25px 0 15px 0;
+      padding-left: 10px;
+      border-left: 4px solid #3498db;
+    }
+    
+    .markdown-body h3 {
+      font-size: 1.2em;
+      color: #7f8c8d;
+      margin: 20px 0 10px 0;
+    }
+    
+    .markdown-body p {
+      margin: 10px 0;
+      line-height: 1.8;
+    }
+    
+    .markdown-body ul, .markdown-body ol {
+      margin: 10px 0;
+      padding-left: 25px;
+    }
+    
+    .markdown-body li {
+      margin: 5px 0;
+      line-height: 1.6;
+    }
+    
+    .markdown-body table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+    }
+    
+    .markdown-body th {
+      background: #667eea;
+      color: white;
+      padding: 12px;
+      text-align: left;
+    }
+    
+    .markdown-body td {
+      border: 1px solid #ddd;
+      padding: 10px;
+    }
+    
+    .markdown-body tr:nth-child(even) {
+      background: #f9f9f9;
+    }
+    
+    .markdown-body code {
+      background: #f4f4f4;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.9em;
+    }
+    
+    .markdown-body pre {
+      background: #2d3436;
+      color: #dfe6e9;
+      padding: 15px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 15px 0;
+    }
+    
+    .markdown-body pre code {
+      background: none;
+      padding: 0;
+      color: inherit;
+    }
+    
+    .markdown-body blockquote {
+      border-left: 4px solid #667eea;
+      padding-left: 15px;
+      margin: 15px 0;
+      color: #666;
+      font-style: italic;
+    }
+    
+    .markdown-body hr {
+      border: none;
+      border-top: 2px solid #eee;
+      margin: 20px 0;
+    }
+    
+    .markdown-body strong {
+      color: #2c3e50;
+    }
+    
+    .markdown-body a {
+      color: #667eea;
+      text-decoration: none;
+    }
+    
+    .markdown-body a:hover {
+      text-decoration: underline;
+    }
+    
+    .toolbar {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .toolbar button {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+    
+    .btn-copy {
+      background: #3498db;
+      color: white;
+    }
+    
+    .btn-copy:hover {
+      background: #2980b9;
+    }
+    
+    .btn-image {
+      background: #e74c3c;
+      color: white;
+    }
+    
+    .btn-image:hover {
+      background: #c0392b;
+    }
+    
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #666;
+    }
+    
+    @media (max-width: 900px) {
+      .preview-container {
+        flex-direction: column;
+      }
+      
+      .file-selector {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .file-selector select {
+        min-width: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🐱 Markdown 渲染器</h1>
+      <p>写文档、看报告，一目了然</p>
+    </div>
+    
+    <div class="nav">
+      <a href="/">🏠 返回首页</a>
+    </div>
+    
+    <div class="file-selector">
+      <label>📂 选择文件：</label>
+      <select id="fileSelect">
+        <option value="">-- 选择 Markdown 文件 --</option>
+      </select>
+    </div>
+    
+    <div class="preview-container">
+      <div class="editor-panel">
+        <div class="panel-header">
+          <span>📝 编辑</span>
+          <div class="toolbar">
+            <button class="btn-copy" onclick="copyMarkdown()">📋 复制</button>
+          </div>
+        </div>
+        <textarea id="editor" placeholder="在这里写 Markdown..."></textarea>
+      </div>
+      
+      <div class="preview-panel">
+        <div class="panel-header">
+          <span>👁️ 预览</span>
+          <div class="toolbar">
+            <button class="btn-image" onclick="exportImage()">📷 导出图片</button>
+          </div>
+        </div>
+        <div class="content">
+          <div id="preview" class="markdown-body">
+            <div class="loading">选择文件或开始编写...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // 加载文件列表
+    async function loadFiles() {
+      try {
+        const res = await fetch('/api/files');
+        const files = await res.json();
+        const select = document.getElementById('fileSelect');
+        
+        files.forEach(file => {
+          const option = document.createElement('option');
+          option.value = file;
+          option.textContent = file;
+          select.appendChild(option);
+        });
+        
+        // 检查 URL 参数，自动加载指定文件
+        const params = new URLSearchParams(window.location.search);
+        const fileParam = params.get('file');
+        if (fileParam) {
+          select.value = fileParam;
+          loadFile(fileParam);
+        }
+      } catch (e) {
+        console.error('加载文件列表失败', e);
+      }
+    }
+    
+    // 加载指定文件
+    async function loadFile(filename) {
+      if (!filename) return;
+      try {
+        const res = await fetch(`/reports/${encodeURIComponent(filename)}`);
+        const content = await res.text();
+        document.getElementById('editor').value = content;
+        renderPreview();
+      } catch (e) {
+        console.error('加载文件失败', e);
+        document.getElementById('editor').value = `# 文件加载失败\n\n文件: ${filename}\n\n请检查文件是否存在。`;
+        renderPreview();
+      }
+    }
+    
+    // 选择文件
+    document.getElementById('fileSelect').addEventListener('change', (e) => {
+      const file = e.target.value;
+      if (!file) return;
+      
+      // 更新 URL（不刷新页面）
+      const url = new URL(window.location);
+      url.searchParams.set('file', file);
+      window.history.pushState({}, '', url);
+      
+      loadFile(file);
+    });
+    
+    // 编辑器变化
+    document.getElementById('editor').addEventListener('input', renderPreview);
+    
+    // 渲染预览
+    function renderPreview() {
+      const markdown = document.getElementById('editor').value;
+      const html = marked.parse(markdown);
+      document.getElementById('preview').innerHTML = html;
+    }
+    
+    // 复制 Markdown
+    function copyMarkdown() {
+      const text = document.getElementById('editor').value;
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.querySelector('.btn-copy');
+        const original = btn.textContent;
+        btn.textContent = '✅ 已复制!';
+        setTimeout(() => btn.textContent = original, 1500);
+      });
+    }
+    
+    // 导出图片
+    async function exportImage() {
+      const markdown = document.getElementById('editor').value;
+      const filename = document.getElementById('fileSelect').value?.replace('.md', '') || 'output';
+      
+      const btn = document.querySelector('.btn-image');
+      const original = btn.textContent;
+      btn.textContent = '⏳ 导出中...';
+      btn.disabled = true;
+      
+      try {
+        const res = await fetch('/api/export-image', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ markdown, filename })
+        });
+        
+        const data = await res.json();
+        if (data.success) {
+          btn.textContent = '✅ 成功!';
+          alert(`图片已保存!\n\n查看: ${data.url}`);
+        } else {
+          btn.textContent = '❌ 失败';
+          alert('导出失败: ' + data.error);
+        }
+      } catch (e) {
+        btn.textContent = '❌ 失败';
+        alert('导出失败: ' + e.message);
+      }
+      
+      setTimeout(() => {
+        btn.textContent = original;
+        btn.disabled = false;
+      }, 2000);
+    }
+    
+    // 初始化
+    loadFiles();
+  </script>
+</body>
+</html>
