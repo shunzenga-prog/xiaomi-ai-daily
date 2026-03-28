@@ -43,6 +43,7 @@
 |-------|------|------|----------|--------|
 | 📝 article-writer | v1.0 | 🟡 基础版 | 初始模板 | 需加入爆款公式 |
 | 📅 content-planner | v1.0 | 🟡 基础版 | 初始模板 | 需加入热点追踪 |
+| 🧠 content-brainstorm | v1.0 | ✅ 已安装 | 从ClawHub安装 | 立即可用 |
 | 🔴 xiaohongshu-mcp | v1.0 | ✅ 可用 | 完整MCP协议 | 需实战测试 |
 | 🔴 xiaohongshu | v1.0 | ✅ 可用 | 完整自动化 | 需发布测试 |
 
