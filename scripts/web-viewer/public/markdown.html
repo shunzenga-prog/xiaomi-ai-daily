@@ -443,6 +443,17 @@
         flex-direction: column;
       }
       
+      /* 编辑模式始终保持左右布局 */
+      .preview-container.edit-mode {
+        flex-direction: row;
+      }
+      
+      .preview-container.edit-mode .editor-panel,
+      .preview-container.edit-mode .preview-panel {
+        min-width: 0;
+        flex: 1;
+      }
+      
       .file-selector {
         flex-direction: column;
         align-items: stretch;
