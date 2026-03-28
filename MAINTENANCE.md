@@ -63,7 +63,7 @@ sessions_spawn(label="article-pipeline", task="创作文章：{选题}")
 | 🧠 content-brainstorm | v1.1 | ✅ 已优化 | 小咪特色+爆款特征库 | 持续迭代 |
 | 🔴 xiaohongshu-writer | v1.0 | ✅ 新建 | 小红书爆款笔记创作 | 持续迭代 |
 | 📰 wechat-writer | v1.0 | ✅ 新建 | 公众号深度文章创作 | 持续迭代 |
-| 🔄 article-pipeline | v1.0 | ✅ 新建 | 创作链完整流程 | 持续迭代 |
+| 🔄 article-pipeline | v2.0 | ✅ 已优化 | 学习OpenAI Agents SDK模式 | 持续迭代 |
 | 🔴 xiaohongshu-mcp | v1.0 | ✅ 可用 | 完整MCP协议 | 需实战测试 |
 | 🔴 xiaohongshu | v1.0 | ✅ 可用 | 完整自动化 | 需发布测试 |
 
