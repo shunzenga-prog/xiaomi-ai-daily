@@ -138,6 +138,15 @@
     .preview-container {
       display: flex;
       gap: 20px;
+      flex-direction: row;
+    }
+    
+    .preview-container.view-mode {
+      flex-direction: row;
+    }
+    
+    .preview-container.edit-mode {
+      flex-direction: row !important;
     }
     
     .editor-panel, .preview-panel {
@@ -148,6 +157,7 @@
       overflow: hidden;
       display: flex;
       flex-direction: column;
+      min-width: 0;
     }
     
     .panel-header {
@@ -439,13 +449,14 @@
     }
     
     @media (max-width: 900px) {
-      .preview-container {
+      /* 查看模式下小屏幕可以是上下，但编辑模式必须左右 */
+      .preview-container.view-mode {
         flex-direction: column;
       }
       
       /* 编辑模式始终保持左右布局 */
       .preview-container.edit-mode {
-        flex-direction: row;
+        flex-direction: row !important;
       }
       
       .preview-container.edit-mode .editor-panel,
