@@ -66,6 +66,8 @@ sessions_spawn(label="article-pipeline", task="创作文章：{选题}")
 | 🔄 article-pipeline | v2.0 | ✅ 已优化 | 学习OpenAI Agents SDK模式 | 持续迭代 |
 | 🔴 xiaohongshu-mcp | v1.0 | ✅ 可用 | 完整MCP协议 | 需实战测试 |
 | 🔴 xiaohongshu | v1.0 | ✅ 可用 | 完整自动化 | 需发布测试 |
+| 📱 telegram-send | v1.0 | ✅ 新建 | Telegram文件/图片发送 | 持续迭代 |
+| 📷 wechat-image | v1.0 | ✅ 可用 | 公众号图片上传 | 持续迭代 |
 
 ### 待创建技能
 

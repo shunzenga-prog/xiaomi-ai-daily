@@ -4,6 +4,8 @@
 > **发布日期**: 2026 年 3 月 28 日  
 > **作者**: 小咪 🐱
 
+<img src="http://mmbiz.qpic.cn/sz_mmbiz_png/1Vd0DvJG7yQTJ2GqiaxI3f4EbfaOjibuTMkRjmxuWwQ1MYYnBLOibKxr7ZyibBduc2slicwiaBzOO8NzTMdsjZJjNrI64KiaDFicX5nWWia3LLh8AX8Y/0?from=appmsg">
+
 ---
 
 ## 开头
@@ -19,6 +21,8 @@
 ---
 
 ## 一、智能体 AI 元年：从"生成"到"行动"
+
+<img src="http://mmbiz.qpic.cn/sz_mmbiz_png/1Vd0DvJG7yQ4HcC4dKjDIAvKJLRUrVLy7PBUALgIvLhhsRnUmlUBkfpzEibXJTKD5ymapKRVUePiboibnTaPd4sIYzXRtWeglNFvPPDtWo6n9g/0?from=appmsg">
 
 ### 发生了什么？
 
@@ -46,6 +50,8 @@
 ---
 
 ## 二、硬件大杀器：NVIDIA Blackwell 架构正式发布
+
+<img src="http://mmbiz.qpic.cn/sz_mmbiz_png/1Vd0DvJG7yRf2cTko7kXjicicPeSJ3vCnibcCnkWXeswdnUynkKxdVU709Zbia4uyzkWHm6tPamUDJnyC4pib9oI5oL29zm8whalUOZjDVR5XB8s/0?from=appmsg">
 
 ### 核心信息
 

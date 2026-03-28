@@ -56,6 +56,13 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 
 **字体问题**: 如果中文显示为方框，是因为系统缺少中文字体。解决方案：在 HTML 中使用 Google Fonts 的 Noto Sans SC 字体（已在 md2img.js 中配置）
 
+### 📱 Telegram 配置
+
+- **boss Telegram ID**: `5715993558`
+- **发送文件**: 使用 `telegram-send` skill
+- **快捷命令**: `openclaw message send --channel telegram --target 5715993558 --media <文件>`
+- **脚本**: `scripts/telegram-send.sh <文件> [说明] [--force-document]`
+
 ---
 
-Add whatever helps you do your job. This is your cheat sheet.
+Add whatever helps you do your job. This is your own cheat sheet.

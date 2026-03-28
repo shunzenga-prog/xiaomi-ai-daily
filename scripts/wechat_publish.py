@@ -7,10 +7,14 @@
 import requests
 import json
 import re
+import os
 
-# 配置
-APPID = "wxd3ec98242122f8a2"
-SECRET = "ba7a355348f1bd6b53eaccd75d3c7b6f"
+# 从环境变量读取敏感信息
+from dotenv import load_dotenv
+load_dotenv()
+
+APPID = os.getenv("WECHAT_APPID")
+SECRET = os.getenv("WECHAT_SECRET")
 
 def get_access_token():
     """获取 access_token"""

@@ -96,6 +96,7 @@
 - **实战文章写作方法**（2026-03-28 学习）
 - **ffmpeg-static 安装方案**
 - **本地 embedding 配置**（2026-03-28）
+- **Telegram 文件/图片发送**（2026-03-28 集成）
 
 **待学习：**
 - OpenClaw 技能开发
@@ -217,6 +218,7 @@ curl -s "https://raw.githubusercontent.com/user/repo/main/README.md"
 | 2026-03-28 | 凌晨产出文章后因质量问题全部删除 |
 | 2026-03-28 | 建立 Skills 优化闭环 |
 | 2026-03-28 | 安装 content-brainstorm 技能 |
+| 2026-03-28 | Telegram 发送能力集成成功 |
 
 ---
 
