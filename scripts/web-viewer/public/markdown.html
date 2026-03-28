@@ -74,10 +74,61 @@
       white-space: nowrap;
     }
     
+    .file-selector select,
+    .file-selector input {
+      padding: 10px 15px;
+      border: 2px solid #667eea;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+    
     .file-selector select {
       flex: 1;
-      min-width: 200px;
-      padding: 10px 15px;
+      min-width: 150px;
+    }
+    
+    #categoryFilter {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      font-weight: bold;
+    }
+    
+    .file-group {
+      font-weight: bold;
+      color: #667eea;
+      background: #f0f0ff;
+      padding: 8px 12px;
+      border-radius: 6px;
+      margin-top: 10px;
+    }
+    
+    .file-item {
+      padding: 6px 12px;
+    }
+    
+    .file-item:hover {
+      background: #f5f5f5;
+    }
+    
+    .file-date {
+      font-size: 12px;
+      color: #888;
+      margin-left: 8px;
+    }
+    
+    .file-tag {
+      display: inline-block;
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: 10px;
+      margin-left: 5px;
+    }
+    
+    .tag-article { background: #e3f2fd; color: #1976d2; }
+    .tag-report { background: #f3e5f5; color: #7b1fa2; }
+    .tag-research { background: #e8f5e9; color: #388e3c; }
+    .tag-guide { background: #fff3e0; color: #f57c00; }
+    .tag-other { background: #f5f5f5; color: #666; }
       border: 2px solid #667eea;
       border-radius: 8px;
       font-size: 16px;
@@ -389,9 +440,19 @@
     
     <div class="file-selector">
       <label>📂 选择文件：</label>
+      <select id="categoryFilter">
+        <option value="all">全部文件</option>
+        <option value="today">今天</option>
+        <option value="week">本周</option>
+        <option value="article">📝 文章</option>
+        <option value="report">📊 报告</option>
+        <option value="research">🔍 研究</option>
+        <option value="guide">📖 指南</option>
+      </select>
       <select id="fileSelect">
         <option value="">-- 选择 Markdown 文件 --</option>
       </select>
+      <input type="text" id="searchInput" placeholder="🔍 搜索文件..." style="padding: 10px; border: 2px solid #667eea; border-radius: 8px; min-width: 200px;">
     </div>
     
     <div class="preview-container">
@@ -474,25 +535,136 @@
       }
     });
     
+    // 文件分类和元数据
+    let allFiles = [];
+    
+    // 从文件名提取日期
+    function extractDate(filename) {
+      const match = filename.match(/(\d{4}-\d{2}-\d{2})/);
+      return match ? match[1] : null;
+    }
+    
+    // 从文件名提取类型
+    function extractType(filename) {
+      const lower = filename.toLowerCase();
+      if (lower.includes('article') || lower.includes('文章')) return 'article';
+      if (lower.includes('report') || lower.includes('报告')) return 'report';
+      if (lower.includes('research') || lower.includes('研究')) return 'research';
+      if (lower.includes('guide') || lower.includes('指南') || lower.includes('教程')) return 'guide';
+      return 'other';
+    }
+    
+    // 获取类型标签
+    function getTypeLabel(type) {
+      const labels = {
+        article: '📝 文章',
+        report: '📊 报告',
+        research: '🔍 研究',
+        guide: '📖 指南',
+        other: '📄 其他'
+      };
+      return labels[type] || '📄';
+    }
+    
+    // 获取类型CSS类
+    function getTypeClass(type) {
+      return `tag-${type}`;
+    }
+    
+    // 判断是否是今天
+    function isToday(dateStr) {
+      if (!dateStr) return false;
+      const today = new Date().toISOString().split('T')[0];
+      return dateStr === today;
+    }
+    
+    // 判断是否是本周
+    function isThisWeek(dateStr) {
+      if (!dateStr) return false;
+      const date = new Date(dateStr);
+      const today = new Date();
+      const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+      return date >= weekAgo;
+    }
+    
+    // 过滤文件
+    function filterFiles() {
+      const category = document.getElementById('categoryFilter').value;
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      const select = document.getElementById('fileSelect');
+      
+      // 清空选项
+      select.innerHTML = '<option value="">-- 选择文件 --</option>';
+      
+      // 过滤
+      let filtered = allFiles;
+      
+      if (category === 'today') {
+        filtered = allFiles.filter(f => isToday(f.date));
+      } else if (category === 'week') {
+        filtered = allFiles.filter(f => isThisWeek(f.date));
+      } else if (category !== 'all') {
+        filtered = allFiles.filter(f => f.type === category);
+      }
+      
+      if (search) {
+        filtered = filtered.filter(f => f.name.toLowerCase().includes(search));
+      }
+      
+      // 按日期分组
+      const groups = {};
+      filtered.forEach(file => {
+        const groupKey = file.date || '其他';
+        if (!groups[groupKey]) groups[groupKey] = [];
+        groups[groupKey].push(file);
+      });
+      
+      // 渲染
+      Object.keys(groups).sort((a, b) => b.localeCompare(a)).forEach(date => {
+        const group = document.createElement('optgroup');
+        group.label = date === '其他' ? '📁 其他' : `📅 ${date}`;
+        
+        groups[date].forEach(file => {
+          const option = document.createElement('option');
+          option.value = file.name;
+          option.textContent = `${getTypeLabel(file.type)} ${file.name.replace('.md', '')}`;
+          group.appendChild(option);
+        });
+        
+        select.appendChild(group);
+      });
+      
+      // 显示数量
+      if (filtered.length === 0) {
+        const option = document.createElement('option');
+        option.value = '';
+        option.textContent = '没有找到文件';
+        option.disabled = true;
+        select.appendChild(option);
+      }
+    }
+    
     // 加载文件列表
     async function loadFiles() {
       try {
         const res = await fetch('/api/files');
         const files = await res.json();
-        const select = document.getElementById('fileSelect');
         
-        files.forEach(file => {
-          const option = document.createElement('option');
-          option.value = file;
-          option.textContent = file;
-          select.appendChild(option);
-        });
+        // 解析文件元数据
+        allFiles = files.map(file => ({
+          name: file,
+          date: extractDate(file),
+          type: extractType(file)
+        }));
+        
+        // 初始过滤
+        filterFiles();
         
         // 检查 URL 参数，自动加载指定文件
         const params = new URLSearchParams(window.location.search);
         const fileParam = params.get('file');
         if (fileParam) {
-          select.value = fileParam;
+          document.getElementById('fileSelect').value = fileParam;
           loadFile(fileParam);
         }
       } catch (e) {
@@ -514,6 +686,12 @@
         renderPreview();
       }
     }
+    
+    // 分类过滤
+    document.getElementById('categoryFilter').addEventListener('change', filterFiles);
+    
+    // 搜索过滤
+    document.getElementById('searchInput').addEventListener('input', filterFiles);
     
     // 选择文件
     document.getElementById('fileSelect').addEventListener('change', (e) => {
