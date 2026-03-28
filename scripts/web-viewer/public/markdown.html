@@ -558,11 +558,15 @@
       if (isEditMode) {
         container.classList.remove('view-mode');
         container.classList.add('edit-mode');
+        // 强制左右布局
+        container.style.flexDirection = 'row';
+        container.style.display = 'flex';
         btn.classList.add('active');
         btn.textContent = '✕ 关闭编辑';
       } else {
         container.classList.remove('edit-mode');
         container.classList.add('view-mode');
+        container.style.flexDirection = '';
         btn.classList.remove('active');
         btn.textContent = '✏️ 编辑';
       }
