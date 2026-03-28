@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Markdown 渲染器 - 小咪报告中心</title>
+  <title>小咪报告中心 - 文章与报告查看器</title>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <style>
     * {
@@ -346,6 +346,33 @@
       background: #8e44ad;
     }
     
+    .btn-edit {
+      background: #27ae60;
+      color: white;
+    }
+    
+    .btn-edit:hover {
+      background: #229954;
+    }
+    
+    .btn-edit.active {
+      background: #e74c3c;
+    }
+    
+    /* 编辑模式切换 */
+    .preview-container.view-mode .editor-panel {
+      display: none;
+    }
+    
+    .preview-container.view-mode .preview-panel {
+      flex: 1;
+    }
+    
+    .preview-container.edit-mode .editor-panel,
+    .preview-container.edit-mode .preview-panel {
+      flex: 1;
+    }
+    
     /* 放大模式 */
     .zoomed {
       font-size: 1.3em;
@@ -430,8 +457,8 @@
 <body>
   <div class="container">
     <div class="header">
-      <h1>🐱 Markdown 渲染器</h1>
-      <p>写文档、看报告，一目了然</p>
+      <h1>🐱 小咪报告中心</h1>
+      <p>查看报告 · 阅读文章 · 一目了然</p>
     </div>
     
     <div class="nav">
@@ -455,7 +482,7 @@
       <input type="text" id="searchInput" placeholder="🔍 搜索文件..." style="padding: 10px; border: 2px solid #667eea; border-radius: 8px; min-width: 200px;">
     </div>
     
-    <div class="preview-container">
+    <div class="preview-container view-mode" id="previewContainer">
       <div class="editor-panel">
         <div class="panel-header">
           <span>📝 编辑</span>
@@ -470,6 +497,7 @@
         <div class="panel-header">
           <span>👁️ 预览</span>
           <div class="toolbar">
+            <button class="btn-edit" id="editBtn" onclick="toggleEdit()">✏️ 编辑</button>
             <button class="btn-zoom" onclick="toggleZoom()">🔍 放大</button>
             <button class="btn-fullscreen" onclick="openFullscreen()">📺 全屏</button>
             <button class="btn-image" onclick="exportImage()">📷 导出</button>
@@ -493,6 +521,26 @@
   </div>
   
   <script>
+    // 编辑模式切换
+    let isEditMode = false;
+    function toggleEdit() {
+      isEditMode = !isEditMode;
+      const container = document.getElementById('previewContainer');
+      const btn = document.getElementById('editBtn');
+      
+      if (isEditMode) {
+        container.classList.remove('view-mode');
+        container.classList.add('edit-mode');
+        btn.classList.add('active');
+        btn.textContent = '✕ 关闭编辑';
+      } else {
+        container.classList.remove('edit-mode');
+        container.classList.add('view-mode');
+        btn.classList.remove('active');
+        btn.textContent = '✏️ 编辑';
+      }
+    }
+    
     // 放大模式切换
     let isZoomed = false;
     function toggleZoom() {
