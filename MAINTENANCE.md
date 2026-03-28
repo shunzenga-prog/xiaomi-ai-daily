@@ -1,6 +1,6 @@
 # 小咪资产维护中心
 
-> 最后更新：2026-03-28 22:05
+> 最后更新：2026-03-29 00:41
 
 ---
 
@@ -68,6 +68,7 @@ sessions_spawn(label="article-pipeline", task="创作文章：{选题}")
 | 🔴 xiaohongshu | v1.0 | ✅ 可用 | 完整自动化 | 需发布测试 |
 | 📱 telegram-send | v1.0 | ✅ 新建 | Telegram文件/图片发送 | 持续迭代 |
 | 📷 wechat-image | v1.0 | ✅ 可用 | 公众号图片上传 | 持续迭代 |
+| 🎨 ai-image-gen | v1.0 | ⚠️ 需授权 | AI图片生成(pollinations) | 需注册 |
 
 ### 待创建技能
 

@@ -185,6 +185,7 @@
       font-size: 14px;
       line-height: 1.6;
       resize: vertical;
+      overflow-y: auto;
     }
     
     .editor-panel textarea:focus {
@@ -195,6 +196,29 @@
       padding: 20px;
       overflow-y: auto;
       flex: 1;
+    }
+    
+    /* 统一滚动条样式 */
+    .editor-panel textarea::-webkit-scrollbar,
+    .preview-panel .content::-webkit-scrollbar {
+      width: 10px;
+    }
+    
+    .editor-panel textarea::-webkit-scrollbar-track,
+    .preview-panel .content::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 5px;
+    }
+    
+    .editor-panel textarea::-webkit-scrollbar-thumb,
+    .preview-panel .content::-webkit-scrollbar-thumb {
+      background: #c1c1c1;
+      border-radius: 5px;
+    }
+    
+    .editor-panel textarea::-webkit-scrollbar-thumb:hover,
+    .preview-panel .content::-webkit-scrollbar-thumb:hover {
+      background: #a1a1a1;
     }
     
     /* Markdown 样式 */
