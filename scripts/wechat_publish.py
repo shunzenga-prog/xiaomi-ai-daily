@@ -81,7 +81,10 @@ def create_draft(access_token, title, content, thumb_media_id):
         }]
     }
     
-    resp = requests.post(url, json=data)
+    # 关键：使用 ensure_ascii=False 避免中文被转成 unicode 编码
+    json_data = json.dumps(data, ensure_ascii=False).encode('utf-8')
+    
+    resp = requests.post(url, data=json_data, headers={'Content-Type': 'application/json'})
     return resp.json()
 
 def main():
