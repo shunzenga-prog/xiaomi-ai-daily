@@ -45,23 +45,70 @@ def upload_thumb(access_token, image_path):
     return data.get("media_id")
 
 def markdown_to_html(md_content):
-    """简单的 Markdown 转 HTML"""
+    """Markdown 转 HTML（支持公众号）"""
     html = md_content
-    # 标题
+    
+    # 1. 先处理表格（公众号需要 HTML 表格）
+    # 匹配 markdown 表格
+    table_pattern = r'\|(.+)\|\n\|[-:\| ]+\|\n((?:\|.+\|\n?)+)'
+    
+    def convert_table(match):
+        header_line = match.group(1).strip()
+        body_lines = match.group(2).strip().split('\n')
+        
+        # 解析表头
+        headers = [cell.strip() for cell in header_line.split('|') if cell.strip()]
+        
+        # 解析表体
+        rows = []
+        for line in body_lines:
+            cells = [cell.strip() for cell in line.split('|') if cell.strip()]
+            if cells:
+                rows.append(cells)
+        
+        # 构建 HTML 表格
+        table_html = '<table style="width:100%;border-collapse:collapse;margin:1em 0;">'
+        
+        # 表头
+        table_html += '<thead><tr>'
+        for h in headers:
+            table_html += f'<th style="border:1px solid #ddd;padding:8px;background:#f5f5f5;text-align:left;">{h}</th>'
+        table_html += '</tr></thead>'
+        
+        # 表体
+        table_html += '<tbody>'
+        for row in rows:
+            table_html += '<tr>'
+            for cell in row:
+                table_html += f'<td style="border:1px solid #ddd;padding:8px;">{cell}</td>'
+            table_html += '</tr>'
+        table_html += '</tbody></table>'
+        
+        return table_html
+    
+    html = re.sub(table_pattern, convert_table, html, flags=re.MULTILINE)
+    
+    # 2. 标题
     html = re.sub(r'^# (.*?)$', r'<h1>\1</h1>', html, flags=re.MULTILINE)
     html = re.sub(r'^## (.*?)$', r'<h2>\1</h2>', html, flags=re.MULTILINE)
     html = re.sub(r'^### (.*?)$', r'<h3>\1</h3>', html, flags=re.MULTILINE)
-    # 加粗
+    
+    # 3. 加粗
     html = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', html)
-    # 斜体
+    
+    # 4. 斜体
     html = re.sub(r'\*(.*?)\*', r'<em>\1</em>', html)
-    # 引用
-    html = re.sub(r'^> (.*?)$', r'<blockquote>\1</blockquote>', html, flags=re.MULTILINE)
-    # 换行
+    
+    # 5. 引用
+    html = re.sub(r'^> (.*?)$', r'<blockquote style="border-left:3px solid #ccc;padding-left:1em;color:#666;">\1</blockquote>', html, flags=re.MULTILINE)
+    
+    # 6. 换行
     html = html.replace('\n\n', '</p><p>')
     html = html.replace('\n', '<br>')
-    # 包裹
-    html = f"<section>{html}</section>"
+    
+    # 7. 包裹
+    html = f"<section style=\"font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;\">{html}</section>"
+    
     return html
 
 def create_draft(access_token, title, content, thumb_media_id):

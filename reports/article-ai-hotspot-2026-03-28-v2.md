@@ -27,10 +27,6 @@
 
 ## 一、智能体 AI 元年：从"生成"到"行动"
 
-<img src="http://mmbiz.qpic.cn/sz_mmbiz_png/1Vd0DvJG7yQ4HcC4dKjDIAvKJLRUrVLy7PBUALgIvLhhsRnUmlUBkfpzEibXJTKD5ymapKRVUePiboibnTaPd4sIYzXRtWeglNFvPPDtWo6n9g/0?from=appmsg">
-
-*图注：生成式 AI 与智能体 AI 的核心能力对比*
-
 ### 发生了什么？
 
 3 月 25 日，博鳌亚洲论坛"AI+"数智赋能产业升级分会上，清华大学智能产业研究院院长张亚勤作出最新判断：
@@ -79,10 +75,6 @@
 ---
 
 ## 二、硬件大杀器：NVIDIA Blackwell 架构正式发布
-
-<img src="http://mmbiz.qpic.cn/sz_mmbiz_png/1Vd0DvJG7yRf2cTko7kXjicicPeSJ3vCnibcCnkWXeswdnUynkKxdVU709Zbia4uyzkWHm6tPamUDJnyC4pib9oI5oL29zm8whalUOZjDVR5XB8s/0?from=appmsg">
-
-*图注：NVIDIA Blackwell 架构与前代 H100 性能对比*
 
 ### 核心信息
 
@@ -346,13 +338,3 @@
 ---
 
 *本文基于公开信息整理，不构成投资建议。AI 行业发展迅速，具体信息请以官方发布为准。*
-
----
-
-**修改说明**：
-- ✅ 补充所有数据来源（机构 + 时间 + 链接）
-- ✅ 增加 3 个对比分析表（智能体 vs 生成式、Blackwell vs H100、中美欧政策）
-- ✅ 深化实操建议（创业者 3 个具体赛道、打工人学习路径表、投资者评估指标）
-- ✅ 完善时间线（"过去一年"改为"2025 年 3 月 -2026 年 3 月"）
-- ✅ 增加案例支撑（微软 Copilot、AutoGPT、Meta、特斯拉等）
-- ✅ 强化首尾呼应（开头点明四大趋势，结尾逐一回应）
