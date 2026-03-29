@@ -97,6 +97,10 @@
 - **ffmpeg-static 安装方案**
 - **本地 embedding 配置**（2026-03-28）
 - **Telegram 文件/图片发送**（2026-03-28 集成）
+- **公众号图片上传**（2026-03-28 集成）
+- **Agent 创作链设计**（2026-03-28 学习）
+- **Skill 开发规范**（2026-03-28 学习）
+- **WSL DNS 问题排查**（2026-03-28 解决）
 
 **待学习：**
 - OpenClaw 技能开发
@@ -219,6 +223,12 @@ curl -s "https://raw.githubusercontent.com/user/repo/main/README.md"
 | 2026-03-28 | 建立 Skills 优化闭环 |
 | 2026-03-28 | 安装 content-brainstorm 技能 |
 | 2026-03-28 | Telegram 发送能力集成成功 |
+| 2026-03-28 | 本地 Embedding 配置成功（nomic-embed-text） |
+| 2026-03-28 | 公众号图片上传功能集成 |
+| 2026-03-28 | Agent 创作链（article-pipeline）设计完成 |
+| 2026-03-28 | Web 查看器搭建成功（localhost:8080） |
+| 2026-03-28 | WSL DNS 问题修复（代理软件劫持） |
+| 2026-03-28 | 创作链首次实战（AI 热点文章，88/100 分） |
 
 ---
 
@@ -230,4 +240,51 @@ curl -s "https://raw.githubusercontent.com/user/repo/main/README.md"
 
 ---
 
-*最后更新：2026-03-28 21:56*
+*最后更新：2026-03-29 02:57（档案龙虾凌晨整理）*
+---
+
+## 2026-03-28 新增重要记忆
+
+### Agent 创作链（Article Pipeline）
+
+**架构：**
+```
+用户 → 分流官 → Guardrails → 创作官 → Guardrails → 审阅官 → 润色官 → 评估官 → Human Loop → 发布官
+```
+
+**关键概念：**
+- Triage Agent（分流官）- 智能分类任务
+- Guardrails（护栏）- 输入输出双重验证
+- Context Variables - 上下文传递
+- Handoff 机制 - Agent 间切换
+- Human in the Loop - 人工介入选项
+
+### Skill 开发规范
+
+**核心原则：**
+1. Skills 应简洁（<5k words）
+2. 不需要 README/CHANGELOG 等辅助文档
+3. 三层加载系统：元数据 → SKILL.md → references/
+4. 结构：scripts/ (可执行) + references/ (详细文档)
+5. **先找现成方案，不要自己瞎设计**（ClawHub marketplace）
+
+### 公众号图片上传
+
+**API：**
+```
+POST https://api.weixin.qq.com/cgi-bin/media/uploadimg?access_token=ACCESS_TOKEN
+返回：{ "url": "http://mmbiz.qpic.cn/..." }
+```
+
+**脚本：** `scripts/wechat-upload-image.py`
+**状态：** ✅ 测试成功
+
+### Web 查看器
+
+**地址：** http://localhost:8080
+**启动：** `node scripts/web-viewer/server.js`
+**用途：** 查看 Markdown 报告、幻灯片、图片
+
+---
+
+*最后更新：2026-03-29 02:57（档案龙虾整理）*

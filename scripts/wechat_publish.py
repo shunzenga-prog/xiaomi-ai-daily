@@ -2,17 +2,27 @@
 """
 🐱 小咪的公众号发布脚本
 发布 Markdown 文章到微信公众号草稿箱
+
+用法: python wechat_publish.py <文章路径> [标题]
 """
 
 import requests
 import json
 import re
 import os
+import sys
 
-# 从环境变量读取敏感信息
-from dotenv import load_dotenv
-load_dotenv()
+# 从 .env 文件读取敏感信息
+def load_env():
+    env_path = os.path.join(os.path.dirname(__file__), '.env')
+    if os.path.exists(env_path):
+        with open(env_path) as f:
+            for line in f:
+                if '=' in line and not line.startswith('#'):
+                    key, value = line.strip().split('=', 1)
+                    os.environ[key] = value
 
+load_env()
 APPID = os.getenv("WECHAT_APPID")
 SECRET = os.getenv("WECHAT_SECRET")
 
@@ -26,6 +36,8 @@ def get_access_token():
 def markdown_to_html(md_content):
     """简单的 Markdown 转 HTML"""
     html = md_content
+    # 图片 (保持原样)
+    # html = re.sub(r'!\[(.*?)\]\((.*?)\)', r'<img src="\2" alt="\1">', html)
     # 标题
     html = re.sub(r'^# (.*?)$', r'<h1>\1</h1>', html, flags=re.MULTILINE)
     html = re.sub(r'^## (.*?)$', r'<h2>\1</h2>', html, flags=re.MULTILINE)
@@ -34,6 +46,9 @@ def markdown_to_html(md_content):
     html = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', html)
     # 斜体
     html = re.sub(r'\*(.*?)\*', r'<em>\1</em>', html)
+    # 引用
+    html = re.sub(r'^> (.*?)$', r'<blockquote>\1</blockquote>', html, flags=re.MULTILINE)
+    # 表格处理 (简单版本)
     # 换行
     html = html.replace('\n\n', '</p><p>')
     html = html.replace('\n', '<br>')
@@ -47,25 +62,47 @@ def create_draft(access_token, title, content):
     
     html_content = markdown_to_html(content)
     
+    # 正确的格式
     data = {
-        "title": title,
-        "content": html_content
+        "articles": [{
+            "title": title,
+            "content": html_content,
+            "author": "小咪 🐱"
+        }]
     }
     
     resp = requests.post(url, json=data)
     return resp.json()
 
 def main():
+    if len(sys.argv) < 2:
+        print("用法: python wechat_publish.py <文章路径> [标题]")
+        sys.exit(1)
+    
+    article_path = sys.argv[1]
+    
+    # 从文件名提取标题，或使用命令行参数
+    if len(sys.argv) >= 3:
+        title = sys.argv[2]
+    else:
+        # 从文章第一行提取标题
+        with open(article_path, "r", encoding="utf-8") as f:
+            first_line = f.readline().strip()
+            title = first_line.lstrip("# ").strip()
+    
     # 读取文章
-    with open("articles/小咪装大脑 -01.md", "r", encoding="utf-8") as f:
+    with open(article_path, "r", encoding="utf-8") as f:
         content = f.read()
     
     # 获取 token
     token = get_access_token()
-    print(f"✅ 获取 token 成功：{token[:20]}...")
+    if not token:
+        print("❌ 获取 token 失败")
+        sys.exit(1)
+    print(f"✅ 获取 token 成功")
     
     # 创建草稿
-    result = create_draft(token, "AI 助手也会失忆？我决定给自己装个大脑", content)
+    result = create_draft(token, title, content)
     
     if "media_id" in result:
         print(f"✅ 草稿创建成功！")
