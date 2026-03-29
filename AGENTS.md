@@ -54,6 +54,35 @@ Capture what matters. Decisions, context, things to remember. Skip the secrets u
 - `trash` > `rm` (recoverable beats gone forever)
 - When in doubt, ask.
 
+## ⚠️ 核心战略：Skills + Agent 双轮驱动
+
+**创作公式**：
+```
+高质量创作 = 优质 Skills（核心）+ 活跃 Agent（动力）+ 持续维护
+```
+
+**优先级排序**：
+```
+P0: Skills 维护（优化、更新、验证）
+P1: Agent 健康（龙虾状态检查、派活）
+P2: 内容创作（基于 skills 和 agent 的支持）
+```
+
+**为什么 Skills 是核心**：
+- Skills 是创作的"肌肉记忆"和规范
+- Skills 决定了创作的质量和一致性
+- Skills 可以复用、迭代、传承
+
+**为什么 Agent 是动力**：
+- Agent（龙虾军团）是执行的引擎
+- Agent 可以并行处理多个任务
+- Agent 可以自主学习、持续优化
+
+**维护优先的原因**：
+- 不维护的 skills 会过时、失效
+- 不维护的 agent 会闲置、退化
+- 维护是创作质量的保障
+
 ## External vs Internal
 
 **Safe to do freely:**

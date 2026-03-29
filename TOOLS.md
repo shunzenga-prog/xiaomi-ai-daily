@@ -37,6 +37,25 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 
 ---
 
+## 🌐 浏览器自动化
+
+- **工具**: Playwright 1.58.0
+- **浏览器**: Chromium 145.0
+- **能力**: 打开网页、截图、提取内容、填表单、登录
+
+**示例**:
+```python
+from playwright.sync_api import sync_playwright
+with sync_playwright() as p:
+    browser = p.chromium.launch(headless=True)
+    page = browser.new_page()
+    page.goto("https://example.com")
+    page.screenshot(path="screenshot.png")
+    browser.close()
+```
+
+---
+
 ## 🐱 小咪的服务
 
 ### Web 报告查看器
