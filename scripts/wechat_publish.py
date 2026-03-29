@@ -33,11 +33,20 @@ def get_access_token():
     data = resp.json()
     return data.get("access_token")
 
+def upload_thumb(access_token, image_path):
+    """上传封面图，获取 thumb_media_id"""
+    url = f"https://api.weixin.qq.com/cgi-bin/material/add_material?access_token={access_token}&type=thumb"
+    
+    with open(image_path, "rb") as f:
+        files = {"media": f}
+        resp = requests.post(url, files=files)
+    
+    data = resp.json()
+    return data.get("media_id")
+
 def markdown_to_html(md_content):
     """简单的 Markdown 转 HTML"""
     html = md_content
-    # 图片 (保持原样)
-    # html = re.sub(r'!\[(.*?)\]\((.*?)\)', r'<img src="\2" alt="\1">', html)
     # 标题
     html = re.sub(r'^# (.*?)$', r'<h1>\1</h1>', html, flags=re.MULTILINE)
     html = re.sub(r'^## (.*?)$', r'<h2>\1</h2>', html, flags=re.MULTILINE)
@@ -48,7 +57,6 @@ def markdown_to_html(md_content):
     html = re.sub(r'\*(.*?)\*', r'<em>\1</em>', html)
     # 引用
     html = re.sub(r'^> (.*?)$', r'<blockquote>\1</blockquote>', html, flags=re.MULTILINE)
-    # 表格处理 (简单版本)
     # 换行
     html = html.replace('\n\n', '</p><p>')
     html = html.replace('\n', '<br>')
@@ -56,18 +64,20 @@ def markdown_to_html(md_content):
     html = f"<section>{html}</section>"
     return html
 
-def create_draft(access_token, title, content):
+def create_draft(access_token, title, content, thumb_media_id):
     """创建草稿"""
     url = f"https://api.weixin.qq.com/cgi-bin/draft/add?access_token={access_token}"
     
     html_content = markdown_to_html(content)
     
-    # 正确的格式
+    # 正确的格式（需要 thumb_media_id）
     data = {
         "articles": [{
             "title": title,
             "content": html_content,
-            "author": "小咪 🐱"
+            "thumb_media_id": thumb_media_id,
+            "author": "小咪",
+            "digest": "智能体元年、NVIDIA Blackwell、政策定调、市场数据"
         }]
     }
     
@@ -101,8 +111,22 @@ def main():
         sys.exit(1)
     print(f"✅ 获取 token 成功")
     
+    # 上传封面图
+    thumb_path = os.path.join(os.path.dirname(article_path), "images", "ai-cover-unsplash.jpg")
+    if os.path.exists(thumb_path):
+        thumb_media_id = upload_thumb(token, thumb_path)
+        if thumb_media_id:
+            print(f"✅ 封面图上传成功: {thumb_media_id}")
+        else:
+            print("⚠️ 封面图上传失败，尝试不使用封面图")
+            thumb_media_id = ""
+    else:
+        print("⚠️ 封面图不存在，尝试不使用封面图")
+        thumb_media_id = ""
+    
     # 创建草稿
-    result = create_draft(token, title, content)
+    print(f"📝 标题: {title} (长度: {len(title)})")
+    result = create_draft(token, title, content, thumb_media_id)
     
     if "media_id" in result:
         print(f"✅ 草稿创建成功！")
